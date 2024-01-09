@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: Inventory Management Service
+  description: API for managing inventory in the warehouse
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /inventory:
+    get:
+      summary: Retrieve all inventory items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inventory'
+
+    post:
+      summary: Create a new inventory item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        '400':
+          description: Bad Request
+
+  /inventory/{id}:
+    get:
+      summary: Retrieve inventory item by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the inventory item
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        '404':
+          description: Not Found
+
+    put:
+      summary: Update inventory item by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the inventory item
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inventory'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inventory'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+
+    delete:
+      summary: Delete inventory item by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the inventory item
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+
+components:
+  schemas:
+    Inventory:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique ID for the inventory item
+        name:
+          type: string
+          description: Name of the inventory item
+        quantity:
+          type: integer
+          description: Quantity of the inventory item
+      required:
+        - name
+        - quantity
