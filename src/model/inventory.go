@@ -14,7 +14,7 @@ type InventoryService interface {
 	DeleteInventory(id int) error
 }
 
-type InventoryRepository interface {
+type InventoryDal interface {
 	GetByID(id int) (*Inventory, error)
 	Create(inventory *Inventory) error
 	Update(inventory *Inventory) error

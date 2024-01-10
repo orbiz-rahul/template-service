@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"orbiz.one/template-service/src/dal/db"
+	"orbiz.one/template-service/src/config"
 	"orbiz.one/template-service/src/handler"
 	kafka "orbiz.one/template-service/src/kafka/producer"
 	"orbiz.one/template-service/src/routes"
@@ -24,9 +24,9 @@ func Start() {
 			fmt.Println("error", err)
 		}
 	}()
-	fmt.Println("2")
-	inventoryService := service.NewInventoryService(*db.NewInventoryRepository(), *kafka.NewKafkaProducer())
-	fmt.Println("3")
+	fmt.Println("Starting service")
+	inventoryService := service.NewInventoryService(&config.DBConfig{Host: "localhost", Port: "5432", DBName: "postgres"}, *kafka.NewKafkaProducer())
+	fmt.Println("Service initialised")
 	inventoryHandler := handler.InventoryHandler{
 		Service: *inventoryService,
 	}
