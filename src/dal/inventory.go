@@ -22,8 +22,8 @@ func (r *InventoryDal) GetByID(id int) (*model.Inventory, error) {
 func (r *InventoryDal) Create(inventory *model.Inventory) error {
 
 	fmt.Println("inside dal")
-	mgr := GetDBManager(r.config)
-	db, err := mgr.GetDBConnector()
+	mgr := GetDBManager()
+	db, err := mgr.GetDBConnector(r.config)
 	if err != nil {
 		fmt.Println("Error initializing database:", err)
 		return err

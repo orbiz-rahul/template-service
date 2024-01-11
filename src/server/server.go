@@ -12,11 +12,6 @@ import (
 	"orbiz.one/template-service/src/service"
 )
 
-type listenAndServerFunc = func(addr string, handler http.Handler)
-type ServerImpl struct {
-	ListenAndServer listenAndServerFunc
-}
-
 func Start() {
 	defer func() {
 		err := recover()
@@ -24,9 +19,21 @@ func Start() {
 			fmt.Println("error", err)
 		}
 	}()
-	fmt.Println("Starting service")
-	inventoryService := service.NewInventoryService(&config.DBConfig{Host: "localhost", Port: "5432", DBName: "postgres"}, *kafka.NewKafkaProducer())
-	fmt.Println("Service initialised")
+
+	// Initialize config file
+	conf, err := config.GetTemplateConfig()
+	if err != nil {
+		fmt.Println("error reading config", err)
+	}
+	// Initialize service
+	inventoryService := service.NewInventoryService(
+		&config.DBConfig{
+			Host:   conf.Postgres.Host,
+			Port:   conf.Postgres.Port,
+			DBName: conf.Postgres.DBName},
+		*kafka.NewKafkaProducer())
+
+	fmt.Println("Service initialized")
 	inventoryHandler := handler.InventoryHandler{
 		Service: *inventoryService,
 	}

@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
-	fmt.Println("hi")
+	fmt.Println("IMS started...")
+
 	server.Start()
 }
